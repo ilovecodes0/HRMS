@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>部门信息管理</title>
+    <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}">
+    <link href="css/common.css" rel="stylesheet" th:href="@{/css/common.css}">
+    <script type="text/javascript" src="js/jquery-1.12.4.min.js" th:src="@{/js/jquery-1.12.4.min.js}"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js" th:src="@{/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
+    <script src="/My97DatePicker/WdatePicker.js" type="text/javascript" th:src="@{/My97DatePicker/WdatePicker.js}"></script>
+    <script src="jquery-validation-1.14.0/lib/jquery.js" th:src="@{/jquery-validation-1.14.0/lib/jquery.js}"></script>
+    <script src="jquery-validation-1.14.0/dist/jquery.validate.min.js" th:src="@{/jquery-validation-1.14.0/dist/jquery.validate.min.js}"></script>
+    <script type="text/javascript">
+        // $(document).ready(function() {
+        //     $("#inputForm").validate({
+        //         rules : {
+        //             deptName: {
+        //                 required : true
+        //             },
+        //         },
+        //         messages : {
+        //             deptName: {
+        //                 required : "部门名称必填"
+        //             },
+        //         }
+        //     })
+        // });
+    </script>
+</head>
+<body>
+<br>
+<form id="inputForm" action="/db/compileInfo/save" method="post" class="form-horizontal"  enctype="multipart/form-data">
+    <input type="hidden" name="id" th:value="${compileInfo.id}" />
+    <div class="form-group" id="compileName">
+        <label for="compileName" class="col-sm-2 control-label">编制名称<b class="error">*</b></label>
+        <div class="col-sm-6">
+            <input name="compileName" th:value="${compileInfo.compileName}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+    <div class="form-group" id="compileType">
+        <label for="compileType" class="col-sm-2 control-label">编制类别</label>
+        <div class="col-sm-6">
+            <select name="compileType" th:value="${compileInfo.compileType}" class="form-control">
+                <option>行政编制</option>
+                <option>事业编制</option>
+                <option>工勤编制</option>
+                <option>员额编制</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group" id="compileNumber">
+        <label for="compileNumber" class="col-sm-2 control-label">编制人数</label>
+        <div class="col-sm-6">
+            <input name="compileNumber" th:value="${compileInfo.compileNumber}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+    <div class="form-group" id="compileTime">
+        <label for="compileTime" class="col-sm-2 control-label">编制时间</label>
+        <div class="col-sm-6">
+            <input name="compileTime" th:value="${compileInfo.compileTime}" maxlength="255" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+        </div>
+    </div>
+    <div class="form-group" id="save">
+        <label for="save" class="col-sm-2 control-label"></label>
+        <div class="col-sm-6">
+            <button class="btn btn-success" type="submit">保 存</button>
+            <button class="btn btn-inf" type="button" onclick="javascript:history.go(-1);">返 回</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>

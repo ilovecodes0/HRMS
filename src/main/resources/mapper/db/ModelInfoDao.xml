@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.so.demosboot.modules.db.dao.ModelInfoDao">
+    <sql id="modelInfoColumns">
+        id, mname, num, name, age, gender, telnum
+    </sql>
+
+    <select id="getById" resultType="com.so.demosboot.modules.db.entity.ModelInfo">
+        SELECT
+        <include refid="modelInfoColumns"/>
+        FROM db_model_info
+        WHERE id = #{id}
+    </select>
+
+	<select id="findList" resultType="com.so.demosboot.modules.db.entity.ModelInfo">
+		SELECT
+		<include refid="modelInfoColumns"/>
+		FROM db_model_info
+		<where>
+
+			<if test="mname != null and mname != ''">
+				AND mname = #{mname}
+			</if>
+		</where>
+		<choose>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <select id="findAllList" resultType="com.so.demosboot.modules.db.entity.ModelInfo">
+        SELECT
+        <include refid="modelInfoColumns"/>
+        FROM db_model_info
+        <where>
+
+        </where>
+        <choose>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO db_model_info(
+			id,
+			mname,
+			num,
+			age,
+			name,
+			gender,
+			telnum
+		) VALUES (
+			#{id},
+			#{mname},
+			#{num},
+			#{age},
+			#{name},
+			#{gender},
+			#{telnum}
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE db_model_info SET
+			mname = #{mname},
+			num = #{num},
+			age = #{age},
+			name = #{name},
+			gender = #{gender},
+			telnum = #{telnum}
+		WHERE id = #{id}
+	</update>
+
+    <update id="delete">
+		DELETE FROM db_model_info
+		WHERE id = #{id}
+	</update>
+</mapper>

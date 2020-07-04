@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.so.demosboot.modules.db.dao.StaffInfoDao">
+    
+	<sql id="staffInfoColumns">
+		a.id AS "id",
+		a.dept_id AS "deptId",
+		a.staff_name AS "staffName",
+		a.sex AS "sex",
+		a.card_no AS "cardNo",
+		a.native_place AS "nativePlace",
+		a.home_address AS "homeAddress",
+		a.phone AS "phone",
+		a.work_years AS "workYears",
+		a.in_time AS "inTime",
+		a.work_post AS "workPost",
+		a.base_salary AS "baseSalary",
+		a.status AS "status",
+		a.out_time AS "outTime",
+		a.remarks AS "remarks",
+		b.dept_name AS "deptName",
+
+		a.job_id AS "jobId",
+		a.degree AS "degree",
+		a.level  AS "level",
+		a.post AS "post",
+		a.tech_title AS "techTitle"
+	</sql>
+	
+	<sql id="staffInfoJoins">
+		left join db_dept_info b on b.id = a.dept_id
+	
+	</sql>
+    
+	<select id="getById" resultType="com.so.demosboot.modules.db.entity.StaffInfo">
+		SELECT 
+			<include refid="staffInfoColumns"/>
+		FROM db_staff_info a
+		<include refid="staffInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.so.demosboot.modules.db.entity.StaffInfo">
+		SELECT 
+			<include refid="staffInfoColumns"/>
+		FROM db_staff_info a
+		<include refid="staffInfoJoins"/>
+		<where>
+			
+			<if test="deptId != null and deptId != ''">
+				AND a.dept_id = #{deptId}
+			</if>
+			<if test="staffName != null and staffName != ''">
+				AND a.staff_name LIKE  concat('%',#{staffName},'%')
+			</if>
+			<if test="workPost != null and workPost != ''">
+				AND a.work_post LIKE  concat('%',#{workPost},'%')
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.so.demosboot.modules.db.entity.StaffInfo">
+		SELECT 
+			<include refid="staffInfoColumns"/>
+		FROM db_staff_info a
+		<include refid="staffInfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO db_staff_info(
+			id,
+			dept_id,
+			staff_name,
+			sex,
+			card_no,
+			native_place,
+			home_address,
+			phone,
+			work_years,
+			in_time,
+			work_post,
+			base_salary,
+			status,
+			out_time,
+			remarks,
+			job_id,
+			degree,
+			level,
+			post,
+			tech_title
+
+		) VALUES (
+			#{id},
+			#{deptId},
+			#{staffName},
+			#{sex},
+			#{cardNo},
+			#{nativePlace},
+			#{homeAddress},
+			#{phone},
+			#{workYears},
+			#{inTime},
+			#{workPost},
+			#{baseSalary},
+			#{status},
+			#{outTime},
+			#{remarks},
+			#{jobId},
+			#{degree},
+			#{level},
+			#{post},
+			#{techTitle}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE db_staff_info SET 	
+			dept_id = #{deptId},
+			staff_name = #{staffName},
+			sex = #{sex},
+			card_no = #{cardNo},
+			native_place = #{nativePlace},
+			home_address = #{homeAddress},
+			phone = #{phone},
+			work_years = #{workYears},
+			in_time = #{inTime},
+			work_post = #{workPost},
+			base_salary = #{baseSalary},
+			status = #{status},
+			out_time = #{outTime},
+			remarks = #{remarks},
+			job_id = #{jobId},
+			degree = #{degree},
+			level = #{level},
+			post = #{post},
+			tech_title = #{techTitle}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM db_staff_info
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

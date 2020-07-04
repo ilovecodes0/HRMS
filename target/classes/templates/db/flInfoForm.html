@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>文档信息管理</title>
+    <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}">
+    <link href="css/common.css" rel="stylesheet" th:href="@{/css/common.css}">
+    <script type="text/javascript" src="js/jquery-1.12.4.min.js" th:src="@{/js/jquery-1.12.4.min.js}"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js" th:src="@{/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
+    <script src="/My97DatePicker/WdatePicker.js" type="text/javascript" th:src="@{/My97DatePicker/WdatePicker.js}"></script>
+    <script src="jquery-validation-1.14.0/lib/jquery.js" th:src="@{/jquery-validation-1.14.0/lib/jquery.js}"></script>
+    <script src="jquery-validation-1.14.0/dist/jquery.validate.min.js" th:src="@{/jquery-validation-1.14.0/dist/jquery.validate.min.js}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#inputForm").validate({
+                rules : {
+                    flName: {
+                        required : true
+                    },
+                },
+                messages : {
+                    flName: {
+                        required : "文档名称必填"
+                    },
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<br>
+<form id="inputForm" action="/db/flInfo/save" method="post" class="form-horizontal"  enctype="multipart/form-data">
+    <input type="hidden" name="id" th:value="${flInfo.id}" />
+
+    <div class="form-group" id="roleSelect">
+        <label for="flName" class="col-sm-1 control-label">文档名称<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="flName" th:value="${flInfo.flName}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="remark" class="col-sm-1 control-label">内容</label>
+        <div class="col-sm-6">
+            <textarea name="remark" cols="100" rows="76" style="height:250px" class="form-control"  placeholder="说点什么...最少输入10个字符" datatype="*10-2000" dragonfly="true" nullmsg="内容不能为空！" onKeyUp="textarealength(this,2000)">[[${flInfo.remark}]]</textarea>
+
+
+        </div>
+    </div>
+
+    <div class="form-group" id="roleSelect">
+        <label for="author" class="col-sm-1 control-label">作者</label>
+        <div class="col-sm-6">
+
+            <input name="author" th:value="${flInfo.author}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+
+
+    <div class="form-group" id="roleSelect">
+        <label for="time" class="col-sm-1 control-label">时间<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="time" th:value="${flInfo.time}" maxlength="255" class="form-control" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+        </div>
+    </div>
+
+
+    <div class="form-group" id="roleSelect">
+        <label for="type" class="col-sm-1 control-label">文档类别</label>
+        <div class="col-sm-6">
+
+            <input name="type" th:value="${flInfo.type}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+
+
+    <div class="form-group" id="roleSelect">
+        <label for="firstname" class="col-sm-1 control-label"></label>
+        <div class="col-sm-6">
+            <button class="btn btn-success" type="submit">保 存</button>
+            <button class="btn btn-inf" type="button" onclick="javascript:history.go(-1);">返 回</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>

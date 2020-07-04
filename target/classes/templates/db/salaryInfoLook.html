@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>薪资信息管理</title>
+	<link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}">
+    <link href="css/common.css" rel="stylesheet" th:href="@{/css/common.css}">
+    <script type="text/javascript" src="js/jquery-1.12.4.min.js" th:src="@{/js/jquery-1.12.4.min.js}"></script>
+    <script type="text/javascript" src="js/jquery-1.12.4.min.js" th:src="@{/js/vue.js}"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js" th:src="@{/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
+          <script src="/My97DatePicker/WdatePicker.js" type="text/javascript" th:src="@{/My97DatePicker/WdatePicker.js}"></script>
+    <script src="jquery-validation-1.14.0/lib/jquery.js" th:src="@{/jquery-validation-1.14.0/lib/jquery.js}"></script>
+    <script src="jquery-validation-1.14.0/dist/jquery.validate.min.js" th:src="@{/jquery-validation-1.14.0/dist/jquery.validate.min.js}"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#inputForm").validate({
+			rules : {
+				staffId: {
+					required : true
+				},
+				yearMon: {
+					required : true
+				},
+				truePrice: {
+					required : true
+				},
+			},
+			messages : {
+				staffId: {
+					required : "员工ID必填"
+				},
+				yearMon: {
+					required : "工资年月必填"
+				},
+				truePrice: {
+					required : "实发工资必填"
+				},
+			}
+		})
+		});
+		
+		
+		
+		
+	</script>
+	
+	
+</head>
+<body>
+	<br>
+	<div id="app">
+	<form id="inputForm" action="/db/salaryInfo/save" method="post" class="form-horizontal"  enctype="multipart/form-data">
+		<input type="hidden" name="id" th:value="${salaryInfo.id}" />
+			
+			<div class="form-group" id="roleSelect">
+				<label for="yearMon" class="col-sm-1 control-label">工资年月<b class="error">*</b></label>
+   				<div class="col-sm-6">
+						 <input id="yearMon" name="yearMon" th:value="${salaryInfo.yearMon}" maxlength="255" class="form-control"
+						 readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM',isShowClear:false});"/>
+				</div>
+			</div>
+			
+			<div class="form-group" id="roleSelect">
+				<label for="staffId" class="col-sm-1 control-label">员工姓名<b class="error">*</b></label>
+   				<div class="col-sm-6">
+   				<input th:value="${salaryInfo.staffName}" maxlength="255" class="form-control" disabled="disabled">
+				</div>
+			</div>
+			
+			<div class="form-group" id="roleSelect">
+				<label for="staffId" class="col-sm-1 control-label">实发工资<b class="error">*</b></label>
+   				<div class="col-sm-6">
+   				<input th:value="${salaryInfo.truePrice}" maxlength="255" class="form-control" disabled="disabled">
+				</div>
+			</div>
+			
+			<div class="form-group" id="roleSelect">
+				<label for="staffId" class="col-sm-1 control-label">工资明细</label>
+   				<div class="col-sm-6">
+					<table class="table table-bordered table-condensed"  id="detailTable">
+						<tr  th:each="salaryDetail:${salaryInfo.details}">
+							<td  th:text="${salaryDetail.name}"></td>
+							<td th:text="${salaryDetail.price}"></td>
+						</tr>
+					</table>
+
+
+				</div>
+			</div>
+			
+			<!-- <div class="form-group" id="roleSelect">
+				<label for="truePrice" class="col-sm-1 control-label">实发工资<b class="error">*</b></label>
+   				<div class="col-sm-6">
+			
+						 <input name="truePrice" th:value="${salaryInfo.truePrice}" maxlength="255" class="form-control"/>
+				</div>
+			</div> -->
+			
+			<div class="form-group" id="roleSelect">
+				<label for="remark" class="col-sm-1 control-label">备注</label>
+   				<div class="col-sm-6">
+			
+						 <input id="remark" name="remark" th:value="${salaryInfo.remark}" maxlength="255" disabled="disabled" class="form-control"/>
+				</div>
+			</div>
+			<div class="form-group" id="roleSelect">
+				<label for="firstname" class="col-sm-1 control-label"></label>
+   				<div class="col-sm-6">
+					<button class="btn btn-inf" type="button" onclick="javascript:history.go(-1);">返 回</button>
+				</div>
+			</div>
+	</form>
+	</div>
+</body>
+
+<script type="text/javascript">
+	    var vm = new Vue({
+	        el: '#app',
+	        data: {
+	        	staffInfo:{
+	        		staffId:"",
+		            yearMon:"",
+		            remark:"",
+					details:[],
+	        	}
+	            
+	        },
+	        methods: {
+	            testM: function() {
+	                return  this.site + " - 学的不仅是技术，更是梦想！";
+	            }
+	        }
+	    })
+	    
+	    function getStaffInfo(id){
+	    	vm.staffInfo.details = [];
+			$.ajax({
+			    type: 'POST',
+			    url: "/db/staffInfo/staffInfo",
+			    data: {"id":id},
+			    dataType: "json",
+			    success: function (callData) {
+			   		var data = {
+			   				"name":"基本工资",
+			   				"price":callData.baseSalary
+			   		}
+			   		vm.staffInfo.details.push(data);
+			   		
+			    }
+			    });
+		};
+		
+		function addLine(){
+			var data = {
+	   				"name":"",
+	   				"price":""
+	   		}
+	   		vm.staffInfo.details.push(data);
+		}
+		
+		
+		function saveMoney(){
+			vm.staffInfo.staffId=$("#staffId").val();
+			vm.staffInfo.yearMon=$("#yearMon").val();
+			vm.staffInfo.remark=$("#remark").val();
+			$.ajax({
+			    type: 'POST',
+			    url: "/db/salaryInfo/saveMoney",
+			    data: JSON.stringify(vm.staffInfo),
+			    dataType: "json",
+			    contentType: "application/json",
+			    success: function (callData) {
+					if(callData.code=="1"){
+						alert("发放成功");
+						 location.reload();
+					}else{
+						alert("发放失败")
+					}
+			    }
+			    });
+		}
+	</script>
+
+</html>

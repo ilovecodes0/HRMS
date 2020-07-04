@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.so.demosboot.modules.db.dao.ZhaopinInfoDao">
+
+    <sql id="zhaopinInfoColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.info AS "info",
+		a.tTime AS "tTime",
+		a.job   AS "job",
+		a.peopleNeed AS "peopleNeed",
+		a.deptName AS "deptName"
+	</sql>
+
+    <sql id="zhaopinInfoJoins">
+-- left join db_dept_info b on b.deptName = a.deptName
+    </sql>
+
+    <select id="getById" resultType="com.so.demosboot.modules.db.entity.ZhaopinInfo">
+        SELECT
+        <include refid="zhaopinInfoColumns"/>
+        FROM db_zhaopin_info a
+        <include refid="zhaopinInfoJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+
+    <select id="findListSum" resultType="com.so.demosboot.modules.db.entity.ZhaopinInfo">
+        SELECT a.job,SUM(a.peopleNeed) peopleNeed
+        FROM db_zhaopin_info a group by a.job
+    </select>
+
+
+    <select id="findList" resultType="com.so.demosboot.modules.db.entity.ZhaopinInfo">
+        SELECT
+        <include refid="zhaopinInfoColumns"/>
+        FROM db_zhaopin_info a
+        <include refid="zhaopinInfoJoins"/>
+        <where>
+
+            <if test="deptName != null and deptName != ''">
+                AND a.deptName = #{deptName}
+            </if>
+
+        </where>
+        <choose>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="com.so.demosboot.modules.db.entity.ZhaopinInfo">
+        SELECT
+        <include refid="zhaopinInfoColumns"/>
+        FROM db_zhaopin_info a
+        <include refid="zhaopinInfoJoins"/>
+        <where>
+
+        </where>
+        <choose>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO db_zhaopin_info(
+			id,
+			title,
+			info,
+			tTime,
+			deptName,
+			job,
+			peopleNeed
+		) VALUES (
+			#{id},
+			#{title},
+			#{info},
+			#{tTime},
+			#{deptName},
+			#{job},
+			#{peopleNeed}
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE db_zhaopin_info SET
+			title = #{title},
+			info = #{info},
+			tTime = #{tTime},
+			deptName=#{deptName},
+			job=#{job},
+			peopleNeed = #{peopleNeed}
+		WHERE id = #{id}
+	</update>
+
+    <update id="delete">
+		DELETE FROM db_zhaopin_info
+		WHERE id = #{id}
+	</update>
+
+</mapper>

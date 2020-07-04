@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>招聘信息管理</title>
+    <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}">
+    <link href="css/common.css" rel="stylesheet" th:href="@{/css/common.css}">
+    <script type="text/javascript" src="js/jquery-1.12.4.min.js" th:src="@{/js/jquery-1.12.4.min.js}"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js" th:src="@{/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
+    <script src="/My97DatePicker/WdatePicker.js" type="text/javascript" th:src="@{/My97DatePicker/WdatePicker.js}"></script>
+    <script src="jquery-validation-1.14.0/lib/jquery.js" th:src="@{/jquery-validation-1.14.0/lib/jquery.js}"></script>
+    <script src="jquery-validation-1.14.0/dist/jquery.validate.min.js" th:src="@{/jquery-validation-1.14.0/dist/jquery.validate.min.js}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#inputForm").validate({
+                rules : {
+                    title: {
+                        required : true
+                    },
+                    dept_id: {
+                        required : true
+                    },
+                    job: {
+                        required : true
+                    }
+                },
+                messages : {
+                    title: {
+                        required : "招聘标题必填"
+                    },
+                    dept_id: {
+                        required : "部门必填"
+                    },
+
+                    job: {
+                        required : "岗位必填"
+                    },
+                }
+            })
+        });
+
+    </script>
+</head>
+<body>
+<br>
+<form id="inputForm" action="/db/zhaopinInfo/save" method="post" class="form-horizontal"  enctype="multipart/form-data">
+    <input type="hidden" name="id" th:value="${zhaopinInfo!=null?zhaopinInfo.id:''}"
+<!--    <div class="form-group" id="roleSelect">-->
+<!--        <label for="id" class="col-sm-1 control-label">id<b class="error">*</b></label>-->
+<!--        <div class="col-sm-6">-->
+
+<!--            <input name="id" th:value="${zhaopinInfo!=null?zhaopinInfo.id:''}" maxlength="255" class="form-control"/>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div class="form-group" id="roleSelect">
+        <label for="dept_name" class="col-sm-1 control-label">部门<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <select name="dept_name" class="form-control">
+                <option value="">请选择</option>
+                <option  th:each="dept:${depts}" th:value="${dept.deptName}" th:text="${dept.deptName}"  th:selected="${zhaopinInfo.deptName==dept.deptName}" > 请选择</option>
+                getDeptInfo(dept.id)
+            </select>
+        </div>
+    </div>
+    <div class="form-group" id="roleSelect">
+        <label for="job" class="col-sm-1 control-label">岗位<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <select name="job" class="form-control">
+                <option value="">请选择</option>
+                <option  th:each="job:${jobs}" th:value="${job.jobName}" th:text="${job.jobName}"  th:selected="${zhaopinInfo.job==job.jobName}"> 请选择</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" id="roleSelect">
+        <label for="people_need" class="col-sm-1 control-label">计划招聘人数<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="people_need" th:value="${zhaopinInfo!=null?zhaopinInfo.peopleNeed:''}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="roleSelect">
+        <label for="title" class="col-sm-1 control-label">标题<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="title" th:value="${zhaopinInfo!=null?zhaopinInfo.title:''}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="roleSelect">
+        <label for="info" class="col-sm-1 control-label">内容</label>
+        <div class="col-sm-6">
+
+            <input name="info" th:value="${zhaopinInfo!=null?zhaopinInfo.info:''}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="roleSelect">
+        <label for="t_time" class="col-sm-1 control-label">时间<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+<!--            <input name="t_time" th:value="${zhaopinInfo!=null ? zhaopinInfo.t_time :''}" maxlength="255" class="form-control"/>-->
+            <input name="t_time" th:value="${zhaopinInfo!=null?zhaopinInfo.tTime:''}" maxlength="255" class="form-control" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+        </div>
+    </div>
+    <div class="form-group" id="roleSelect">
+        <label for="firstname" class="col-sm-1 control-label"></label>
+        <div class="col-sm-6">
+            <button class="btn btn-success" type="submit">保 存</button>
+            <button class="btn btn-inf" type="button" onclick="javascript:history.go(-1);">返 回</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>

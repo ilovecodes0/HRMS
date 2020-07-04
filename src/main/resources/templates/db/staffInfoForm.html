@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>员工信息管理</title>
+    <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet"
+          th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}">
+    <link href="css/common.css" rel="stylesheet" th:href="@{/css/common.css}">
+    <script type="text/javascript" src="js/jquery-1.12.4.min.js" th:src="@{/js/jquery-1.12.4.min.js}"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"
+            th:src="@{/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
+    <script src="/My97DatePicker/WdatePicker.js" type="text/javascript"
+            th:src="@{/My97DatePicker/WdatePicker.js}"></script>
+    <script src="jquery-validation-1.14.0/lib/jquery.js" th:src="@{/jquery-validation-1.14.0/lib/jquery.js}"></script>
+    <script src="jquery-validation-1.14.0/dist/jquery.validate.min.js"
+            th:src="@{/jquery-validation-1.14.0/dist/jquery.validate.min.js}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#inputForm").validate({
+                rules: {
+                    deptId: {
+                        required: true
+                    },
+                    staffName: {
+                        required: true
+                    },
+                    sex: {
+                        required: true
+                    },
+                    cardNo: {
+                        required: true
+                    },
+                    nativePlace: {
+                        required: true
+                    },
+                    phone: {
+                        required: true
+                    },
+                    baseSalary: {
+                        required: true
+                    },
+                    status: {
+                        required: true
+                    },
+                },
+                messages: {
+                    deptId: {
+                        required: "部门ID必填"
+                    },
+                    staffName: {
+                        required: "员工姓名必填"
+                    },
+                    sex: {
+                        required: "性别必填"
+                    },
+                    cardNo: {
+                        required: "身份证号必填"
+                    },
+                    nativePlace: {
+                        required: "籍贯必填"
+                    },
+                    phone: {
+                        required: "联系电话必填"
+                    },
+                    baseSalary: {
+                        required: "基本工资必填"
+                    },
+                    status: {
+                        required: "员工状态必填"
+                    },
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<br>
+<form id="inputForm" action="/db/staffInfo/save" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <input type="hidden" name="id" th:value="${staffInfo.id}"/>
+
+    <div class="form-group" id="deptId">
+        <label for="deptId" class="col-sm-1 control-label">部门ID<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <select name="deptId" class="form-control">
+                <option value="">请选择</option>
+                <option th:each="dept:${depts}" th:value="${dept.id}" th:text="${dept.deptName}"
+                        th:selected="${staffInfo.deptId==dept.id}"> 请选择
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" id="staffName">
+        <label for="staffName" class="col-sm-1 control-label">员工姓名<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="staffName" th:value="${staffInfo.staffName}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="sex">
+        <label for="sex" class="col-sm-1 control-label">性别<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <select name="sex" th:value="${staffInfo.sex}" class="form-control">
+                <option value="">请选择</option>
+                <option value="男" th:selected="${staffInfo.sex=='男'}">男</option>
+                <option value="女" th:selected="${staffInfo.sex=='女'}">女</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" id="cardNo">
+        <label for="cardNo" class="col-sm-1 control-label">身份证号<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="cardNo" th:value="${staffInfo.cardNo}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <!--————————————————-->
+
+    <div class="form-group" id="jobId">
+        <label for="jobId" class="col-sm-1 control-label">工号<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="jobId" th:value="${staffInfo.jobId}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="degree">
+        <label for="degree" class="col-sm-1 control-label">文化程度<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="degree" th:value="${staffInfo.degree}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="level">
+        <label for="level" class="col-sm-1 control-label">技术等级<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="level" th:value="${staffInfo.level}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="post">
+        <label for="post" class="col-sm-1 control-label">职务<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="post" th:value="${staffInfo.post}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+    <!--职称-->
+    <div class="form-group" id="techTitle">
+        <label for="techTitle" class="col-sm-1 control-label">职称<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="techTitle" th:value="${staffInfo.techTitle}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <!--——————————————————-->
+
+    <div class="form-group" id="nativePlace">
+        <label for="nativePlace" class="col-sm-1 control-label">籍贯<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="nativePlace" th:value="${staffInfo.nativePlace}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="homeAddress">
+        <label for="homeAddress" class="col-sm-1 control-label">家庭住址</label>
+        <div class="col-sm-6">
+
+            <input name="homeAddress" th:value="${staffInfo.homeAddress}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="phone">
+        <label for="phone" class="col-sm-1 control-label">联系电话<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="phone" th:value="${staffInfo.phone}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="workYears">
+        <label for="workYears" class="col-sm-1 control-label">工作年限</label>
+        <div class="col-sm-6">
+
+            <input name="workYears" th:value="${staffInfo.workYears}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="inTime">
+        <label for="inTime" class="col-sm-1 control-label">入职时间</label>
+        <div class="col-sm-6">
+
+            <input name="inTime" th:value="${staffInfo.inTime}" maxlength="255" class="form-control" readonly="readonly"
+                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="workPost">
+        <label for="workPost" class="col-sm-1 control-label">工作岗位</label>
+        <div class="col-sm-6">
+            <input name="workPost" th:value="${staffInfo.workPost}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="baseSalary">
+        <label for="baseSalary" class="col-sm-1 control-label">基本工资<b class="error">*</b></label>
+        <div class="col-sm-6">
+
+            <input name="baseSalary" th:value="${staffInfo.baseSalary}" maxlength="255" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="status">
+        <label for="status" class="col-sm-1 control-label">员工状态<b class="error">*</b></label>
+        <div class="col-sm-6">
+            <select name="status" th:value="${staffInfo.status}" class="form-control">
+                <option value="">请选择</option>
+                <option value="在职" th:selected="${staffInfo.status=='在职'}">在职</option>
+                <option value="离职" th:selected="${staffInfo.status=='离职'}">离职</option>
+                <option value="辞退" th:selected="${staffInfo.status=='辞退'}">辞退</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" id="outTime">
+        <label for="outTime" class="col-sm-1 control-label">离职时间</label>
+        <div class="col-sm-6">
+
+            <input name="outTime" th:value="${staffInfo.outTime}" maxlength="255" class="form-control"
+                   readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+        </div>
+    </div>
+
+    <div class="form-group" id="remarks">
+        <label for="remarks" class="col-sm-1 control-label">备注</label>
+        <div class="col-sm-6">
+            <textarea rows="10" cols="30" name="remarks" class="form-control" th:text="${staffInfo.remarks}"
+                      ></textarea>
+        </div>
+    </div>
+    <div class="form-group" id="firstname">
+        <label for="firstname" class="col-sm-1 control-label"></label>
+        <div class="col-sm-6">
+            <button class="btn btn-success" type="submit">保 存</button>
+            <button class="btn btn-inf" type="button" onclick="javascript:history.go(-1);">返 回</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>

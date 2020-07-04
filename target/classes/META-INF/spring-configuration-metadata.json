@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "project",
+      "type": "com.so.demosboot.common.config.BaseInfoConfig",
+      "sourceType": "com.so.demosboot.common.config.BaseInfoConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "project.pro-name",
+      "type": "java.lang.String",
+      "sourceType": "com.so.demosboot.common.config.BaseInfoConfig"
+    }
+  ],
+  "hints": []
+}

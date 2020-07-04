@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.so.demosboot.modules.db.dao.BaomingInfoDao">
+
+    <sql id="baomingInfoColumns">
+		a.id AS "id",
+		a.staffName AS "staffName",
+		a.sex AS "sex",
+		a.nativePlace   AS "nativePlace",
+		a.homeAddress AS"homeAddress",
+		a.phone AS "phone",
+		a.inTime AS "inTime",
+		a.workPost AS "workPost",
+		a.statement AS "statement",
+		a.remarks AS "remarks",
+		a.mianshi AS "mianshi",
+		a.bishi AS "bishi"
+--  		b.dept_name AS "deptName"
+	</sql>
+
+    <sql id="baomingInfoJoins">
+-- left join db_dept_info b on b.deptName = a.deptName
+    </sql>
+
+    <select id="getById" resultType="com.so.demosboot.modules.db.entity.BaomingInfo">
+        SELECT
+        <include refid="baomingInfoColumns"/>
+        FROM db_baoming_info a
+        <include refid="baomingInfoJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+
+<!--	<select id="getById1" resultType="com.so.demosboot.modules.db.entity.BaomingInfo">-->
+<!--		SELECT-->
+<!--		<include refid="baomingInfoColumns"/>-->
+<!--		FROM db_baoming_info a-->
+<!--		<include refid="baomingInfoJoins"/>-->
+<!--		WHERE a.id = #{id} AND a.mianshi>=60 AND a.bishi>=60-->
+<!--	</select>-->
+
+	<select id="findList1" resultType="com.so.demosboot.modules.db.entity.BaomingInfo">
+		select * from db_baoming_info a where a.bishi>=60 and a.mianshi>=60
+	</select>
+
+    <select id="findList" resultType="com.so.demosboot.modules.db.entity.BaomingInfo">
+        SELECT
+        <include refid="baomingInfoColumns"/>
+        FROM db_baoming_info a
+        <include refid="baomingInfoJoins"/>
+        <where>
+
+            <if test="id != null and id != ''">
+                AND a.id = #{id}
+            </if>
+
+        </where>
+        <choose>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="com.so.demosboot.modules.db.entity.BaomingInfo">
+        SELECT
+        <include refid="baomingInfoColumns"/>
+        FROM db_baoming_info a
+        <include refid="baomingInfoJoins"/>
+        <where>
+
+        </where>
+        <choose>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO db_baoming_info(
+			id,
+			staffName,
+			sex,
+			nativePlace,
+			homeAddress,
+			phone,
+			inTime,
+			workPost,
+			statement,
+			remarks,
+			mianshi,
+			bishi
+		) VALUES (
+			#{id},
+			#{staffName},
+			#{sex},
+			#{nativePlace},
+			#{homeAddress},
+			#{phone},
+			#{inTime},
+			#{workPost},
+			#{statement},
+			#{remarks},
+			#{mianshi},
+			#{bishi}
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE db_baoming_info SET
+			id = #{id},
+			staffName = #{staffName},
+			sex = #{sex},
+			nativePlace=#{nativePlace},
+			homeAddress=#{homeAddress},
+			phone = #{phone},
+			inTime=#{inTime},
+			workPost=#{workPost},
+			statement=#{statement},
+			remarks=#{remarks},
+			mianshi=#{mianshi},
+			bishi=#{bishi}
+		WHERE id = #{id}
+	</update>
+
+    <update id="delete">
+		DELETE FROM db_baoming_info
+		WHERE id = #{id}
+	</update>
+
+</mapper>

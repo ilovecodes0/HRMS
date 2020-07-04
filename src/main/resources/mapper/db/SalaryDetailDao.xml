@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.so.demosboot.modules.db.dao.SalaryDetailDao">
+    
+	<sql id="salaryDetailColumns">
+		a.id AS "id",
+		a.salary_id AS "salaryId",
+		a.price AS "price",
+		a.name AS "name",
+		a.remark AS "remark"
+	</sql>
+	
+	<sql id="salaryDetailJoins">
+	</sql>
+    
+	<select id="getById" resultType="com.so.demosboot.modules.db.entity.SalaryDetail">
+		SELECT 
+			<include refid="salaryDetailColumns"/>
+		FROM db_salary_detail a
+		<include refid="salaryDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.so.demosboot.modules.db.entity.SalaryDetail">
+		SELECT 
+			<include refid="salaryDetailColumns"/>
+		FROM db_salary_detail a
+		<include refid="salaryDetailJoins"/>
+		<where>
+			
+			<if test="salaryId != null and salaryId != ''">
+				AND a.salary_id = #{salaryId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE  concat('%',#{name},'%')
+			</if>
+		</where>
+		<choose>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.so.demosboot.modules.db.entity.SalaryDetail">
+		SELECT 
+			<include refid="salaryDetailColumns"/>
+		FROM db_salary_detail a
+		<include refid="salaryDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO db_salary_detail(
+			id,
+			salary_id,
+			price,
+			name,
+			remark
+		) VALUES (
+			#{id},
+			#{salaryId},
+			#{price},
+			#{name},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE db_salary_detail SET 	
+			salary_id = #{salaryId},
+			price = #{price},
+			name = #{name},
+			remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM db_salary_detail
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

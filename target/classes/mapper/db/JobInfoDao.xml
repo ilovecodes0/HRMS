@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.so.demosboot.modules.db.dao.JobInfoDao">
+    <sql id="jobInfoColumns">
+        id, jobName, deptId, compileId, jobTime
+    </sql>
+
+    <resultMap id="getJobInfo" type="com.so.demosboot.modules.db.entity.JobInfo">
+        <id property="id" column="id"/>
+        <result property="jobName" column="jobName"/>
+        <result property="deptId" column="deptId"/>
+        <result property="compileId" column="compileId"/>
+        <result property="jobTime" column="jobTime"/>
+        <association property="deptInfo" javaType="com.so.demosboot.modules.db.entity.DeptInfo">
+            <id property="id" column="dId"/>
+            <result property="deptName" column="dept_name"/>
+        </association>
+        <association property="compileInfo" javaType="com.so.demosboot.modules.db.entity.CompileInfo">
+            <id property="id" column="cId"/>
+            <result property="compileName" column="compileName"/>
+            <result property="compileNumber" column="compileNumber"/>
+        </association>
+    </resultMap>
+
+    <select id="getById" resultMap="getJobInfo">
+		SELECT a.*,b.id as dId,b.dept_name,c.id as cId,c.compileName,c.compileNumber
+		FROM db_job_info a left join db_dept_info b on a.deptId=b.id left join db_compile_info c on a.compileId = c.id
+		WHERE a.id = #{id}
+	</select>
+
+    <select id="findList" resultMap="getJobInfo">
+        SELECT a.*,b.id as dId,b.dept_name,c.id as cId,c.compileName,c.compileNumber
+        FROM db_job_info a left join db_dept_info b on a.deptId=b.id left join db_compile_info c on a.compileId = c.id
+        <where>
+            <if test="jobName != null and jobName != ''">
+                AND a.jobName = #{jobName}
+            </if>
+        </where>
+        <choose>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="com.so.demosboot.modules.db.entity.JobInfo">
+        SELECT
+        <include refid="jobInfoColumns"/>
+        FROM db_job_info a
+        <where>
+        </where>
+        <choose>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO db_job_info(
+			id,
+			jobName,
+			deptId,
+			compileId,
+			jobTime
+		) VALUES (
+			#{id},
+			#{jobName},
+			#{deptId},
+			#{compileId},
+			#{jobTime}
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE db_job_info SET
+			jobName = #{jobName},
+			deptId = #{deptId},
+			compileId = #{compileId},
+			jobTime = #{jobTime}
+		WHERE id = #{id}
+	</update>
+
+    <update id="delete">
+		DELETE FROM db_job_info
+		WHERE id = #{id}
+	</update>
+</mapper>

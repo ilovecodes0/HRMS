@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.so.demosboot.modules.db.dao.DeptInfoDao">
+    
+	<sql id="deptInfoColumns">
+		a.id AS "id",
+		a.dept_name AS "deptName",
+		a.remark AS "remark",
+		a.deptSize as "deptSize",
+		a.deptFundForm as "deptFundForm",
+		a.pId as "pId"
+	</sql>
+	<sql id="deptInfoJoins">
+	</sql>
+    
+	<resultMap id="getList" type="com.so.demosboot.modules.db.entity.DeptInfo">
+		<id property="id" column="id"/>
+		<result property="deptName" column="dept_name"/>
+		<result property="remark" column="remark"/>
+		<result property="deptSize" column="deptSize"/>
+		<result property="deptFundForm" column="deptFundForm"/>
+		<result property="pId" column="pId"/>
+		<association property="pDeptInfo" javaType="com.so.demosboot.modules.db.entity.DeptInfo">
+			<id property="id" column="bid"/>
+			<result property="deptName" column="bname"/>
+		</association>
+	</resultMap>
+	
+	<select id="getById" resultMap="getList">
+		SELECT a.*,b.id as bid,b.dept_name as bname
+		FROM db_dept_info a left join db_dept_info b on a.pId=b.id
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultMap="getList">
+		SELECT a.*,b.id as bid,b.dept_name as bname
+		FROM db_dept_info a left join db_dept_info b on a.pId=b.id
+		<where>
+			<if test="deptName != null and deptName != ''">
+				AND a.dept_name = #{deptName}
+			</if>
+		</where>
+		<choose>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.so.demosboot.modules.db.entity.DeptInfo">
+		SELECT 
+			<include refid="deptInfoColumns"/>
+		FROM db_dept_info a
+		<include refid="deptInfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO db_dept_info(
+			id,
+			dept_name,
+			remark,
+			deptSize,
+			deptFundForm,
+			pId
+		) VALUES (
+			#{id},
+			#{deptName},
+			#{remark},
+			#{deptSize},
+			#{deptFundForm},
+			#{pId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE db_dept_info SET 	
+			dept_name = #{deptName},
+			remark = #{remark},
+			deptSize = #{deptSize},
+			deptFundForm = #{deptFundForm},
+			pId = #{pId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM db_dept_info
+		WHERE id = #{id}
+	</update>
+
+	<select id="genderStatistics" resultType="com.so.demosboot.modules.db.entity.DeptInfo">
+		SELECT a.sex as deptName, count(a.id) as deptSize
+		FROM db_staff_info a left join db_dept_info b on a.dept_id=b.id
+		WHERE b.id=#{id}
+		GROUP BY a.sex
+	</select>
+
+	<select id="jobStatistics" resultType="com.so.demosboot.modules.db.entity.DeptInfo">
+		SELECT a.work_post as deptName, count(a.id) as deptSize
+		FROM db_staff_info a left join db_dept_info b on a.dept_id=b.id
+		WHERE b.id=#{id}
+		GROUP BY a.work_post
+	</select>
+
+	<select id="rankStatistics" resultType="com.so.demosboot.modules.db.entity.DeptInfo">
+		SELECT a.tech_title as deptName, count(a.id) as deptSize
+		FROM db_staff_info a left join db_dept_info b on a.dept_id=b.id
+		WHERE b.id=#{id}
+		GROUP BY a.tech_title
+	</select>
+
+	<select id="degreeStatistics" resultType="com.so.demosboot.modules.db.entity.DeptInfo">
+		SELECT a.degree as deptName, count(a.id) as deptSize
+		FROM db_staff_info a left join db_dept_info b on a.dept_id=b.id
+		WHERE b.id=#{id}
+		GROUP BY a.degree
+	</select>
+
+</mapper>
